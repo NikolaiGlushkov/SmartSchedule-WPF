@@ -69,6 +69,8 @@
 
             <TabControl.ContentTemplate>
                 <DataTemplate>
+                    
+
                     <DataGrid x:Name="dgSmSchedule" 
                               ItemsSource="{Binding DGDataList}" 
                               FontSize="15" AutoGenerateColumns="False" 
@@ -78,7 +80,8 @@
                               VirtualizingPanel.IsVirtualizing="False"
                               LoadingRow="dgSmSchedule_LoadingRow" 
                               UnloadingRow="RowHeaderUpdate_UnloadingRow" 
-                              PreviewKeyDown="SolutionPlaceholderBugAndTextTransfer_PreviewKeyDown"
+                              PreviewKeyDown="DataGrid_PreviewKeyDown"
+                              PreviewTextInput="DataGrid_PreviewTextInput"
                               CanUserResizeRows="False">
                         <DataGrid.Resources>
                             <Style TargetType="TextBlock" x:Key="WrapText">

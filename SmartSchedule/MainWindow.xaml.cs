@@ -288,7 +288,6 @@ namespace SmartSchedule
             e.Row.Header = (e.Row.GetIndex() + 1).ToString();
         }
 
-
         private void RowHeaderUpdate_UnloadingRow(object sender, DataGridRowEventArgs e)
         {
             var dataGrid = sender as DataGrid;
@@ -319,25 +318,43 @@ namespace SmartSchedule
             }
         }
 
-        private void SolutionPlaceholderBugAndTextTransfer_PreviewKeyDown(object sender, KeyEventArgs e)
+        private void DataGrid_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key != Key.Enter || Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
+            // This condition "if" allows access to the newline in textcolumns with "Shift + Enter".
+            if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
                 return;
-            
-            var grid = sender as DataGrid;
 
-            if (grid != null)
+            var grid = sender as DataGrid;
+            if (grid == null) return;
+
+            // Prevents focus from moving to the custom Add Button row on Enter, which would lock the grid and prevent re-entering edit mode in the last row.
+            if (e.Key == Key.Enter)
             {
                 grid.CommitEdit(DataGridEditingUnit.Cell, true);
                 grid.CommitEdit(DataGridEditingUnit.Row, true);
-
                 grid.Focus();
-
                 e.Handled = true;
+                return;
+            }
+
+            // 26.05
+            // Fixes the WPF bug where existing text in DataGridTextColumns is overwritten by any user input before the TextBox in DataGridCell enters edit mode and is initialized
+            // and allows to use paste operation.
+            bool isSpaceOrPaste = e.Key == Key.Space || (e.Key == Key.V && Keyboard.Modifiers.HasFlag(ModifierKeys.Control));
+
+            if (isSpaceOrPaste && grid.CurrentColumn is DataGridTextColumn && Keyboard.FocusedElement is not TextBox)
+            {
+                grid.BeginEdit();
+                var textBox = Keyboard.FocusedElement as TextBox;
+                if (textBox != null)
+                {
+                    textBox.SelectionLength = 0;
+                    textBox.CaretIndex = textBox.Text.Length;
+                }
             }
         }
 
-        // DataPicker--------------------------------------------------------------------------------------
+        // DatePicker--------------------------------------------------------------------------------------
 
         private void DatePicker_CalendarClosed(object sender, RoutedEventArgs e)
         {
@@ -447,7 +464,6 @@ namespace SmartSchedule
             if (string.IsNullOrEmpty(textBox.Text))
             {
                 textBox.Text = $"__{sep}__{sep}____";
-
             }
 
             int index = textBox.SelectionStart;
@@ -457,7 +473,6 @@ namespace SmartSchedule
                 e.Handled = true;
                 return;
             }
-
 
             if (textBox.Text[index].ToString() == sep)
             {
@@ -555,11 +570,34 @@ namespace SmartSchedule
 
             if (dp?.DataContext is DGModel model)
             {
-
                 if (model.DeadLine != null)
                 {
                     model.DeadLineError = string.Empty;
                 }
+            }
+        }
+
+
+        // EndOfDatePicker--------------------------------------------------------------------------------------
+
+        // 26.05
+        private void DataGrid_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            var grid = sender as DataGrid;
+            if (grid == null) return;
+
+            // Fixes the WPF bug where existing text in DataGridTextColumns is overwritten by any user input before the TextBox in DataGridCell enters edit mode and is initialized. 
+            // The first part of "if" condition prevents crashes during paste operation. 
+            if (!string.IsNullOrEmpty(e.Text) && !char.IsControl(e.Text, 0) && grid.CurrentColumn is DataGridTextColumn && Keyboard.FocusedElement is not TextBox)
+            {
+                grid.BeginEdit();
+                var textBox = Keyboard.FocusedElement as TextBox;
+                if (textBox != null)
+                {
+                    textBox.SelectionLength = 0;
+                    textBox.CaretIndex = textBox.Text.Length;
+                }
+
             }
         }
     }
