@@ -28,6 +28,17 @@ As a former psychologist, I designed this app using behavioral principles:
 
 <br>
 
+##  User Guide
+
+### Tab Management
+* `+` Button — Add a new tab (up to 8 tabs max).
+* `x` Button — Delete the selected tab (asks for confirmation).
+* `Double-Click` on a tab header — Rename the tab.
+* `Enter` (while renaming) — Save the new tab name.
+* `Escape` or `Ctrl + Z` (while renaming) — Cancel renaming and keep the previous name.
+
+<br>
+
 ##  Tech Stack
 * **Programming Language:** C# 13
 * **Platform:** .NET 9
