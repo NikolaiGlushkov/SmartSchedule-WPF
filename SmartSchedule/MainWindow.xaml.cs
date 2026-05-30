@@ -30,10 +30,7 @@ namespace SmartSchedule
 
         private ObservableCollection<TCViewModel> _tCDataList;
 
-        private readonly string _path = $"{Environment.CurrentDirectory}\\tCDataList.json";
-
         private FileIOService _fileIOService;
-
 
         public ObservableCollection<TCViewModel> TCDataList
         {
@@ -46,7 +43,6 @@ namespace SmartSchedule
                 _tCDataList = value;
             }
         }
-
 
         public MainWindow()
         {
@@ -65,7 +61,7 @@ namespace SmartSchedule
 
             tabContr.SelectedIndex = Properties.Settings.Default.LastTabIndex;
 
-            _fileIOService = new FileIOService(_path);
+            _fileIOService = new FileIOService();
 
             try
             {
@@ -81,6 +77,7 @@ namespace SmartSchedule
             if (TCDataList.Count == 0)
             {
                 TCDataList = new ObservableCollection<TCViewModel> { new TCViewModel() };
+                tabContr.SelectedIndex = 0;
             }
 
             TCDataList.CollectionChanged += TCDataList_CollectionChanged;
@@ -580,12 +577,13 @@ namespace SmartSchedule
 
         // EndOfDatePicker--------------------------------------------------------------------------------------
 
-        // 26.05
+
         private void DataGrid_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             var grid = sender as DataGrid;
             if (grid == null) return;
 
+            // 26.05
             // Fixes the WPF bug where existing text in DataGridTextColumns is overwritten by any user input before the TextBox in DataGridCell enters edit mode and is initialized. 
             // The first part of "if" condition prevents crashes during paste operation. 
             if (!string.IsNullOrEmpty(e.Text) && !char.IsControl(e.Text, 0) && grid.CurrentColumn is DataGridTextColumn && Keyboard.FocusedElement is not TextBox)
