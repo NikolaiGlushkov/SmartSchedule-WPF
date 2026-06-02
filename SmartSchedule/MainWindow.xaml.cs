@@ -301,7 +301,7 @@ namespace SmartSchedule
             }
         }
 
-        private void CheckBox_Click(object sender, RoutedEventArgs e)
+        private void IsDoneCheckBox_Click(object sender, RoutedEventArgs e)
         {
             var checkBox = sender as CheckBox;
 
@@ -324,6 +324,38 @@ namespace SmartSchedule
             var grid = sender as DataGrid;
             if (grid == null) return;
 
+
+            // get rid of the repeating code from the IsDoneCheckBox_Click event (move repeating logic to a separate method)
+            // allow to use "spacebar" for checkmark in checkboxcolumn "Done" to trigger the Confirmation Window 
+            if (e.Key == Key.Space && grid.CurrentColumn.Header?.ToString() == "Done")
+            {
+                e.Handled = true; 
+
+                grid.BeginEdit(); 
+
+                if (Keyboard.FocusedElement is CheckBox activeCheckBox)
+                {
+                    if (activeCheckBox.IsChecked == false)
+                    {
+                        activeCheckBox.IsChecked = true;
+
+                        var item = activeCheckBox.DataContext as DGModel;
+
+                        var viewModel = tabContr.SelectedItem as TCViewModel;
+
+                        viewModel?.DeleteRowCommand.Execute(item);
+                    }
+                    else
+                    {
+                        activeCheckBox.IsChecked = false;
+                    }
+                    grid.CommitEdit(DataGridEditingUnit.Cell, true);
+                    
+                }
+                return;
+            }
+
+
             // Prevents focus from moving to the custom Add Button row on Enter, which would lock the grid and prevent re-entering edit mode in the last row.
             if (e.Key == Key.Enter)
             {
@@ -334,7 +366,7 @@ namespace SmartSchedule
                 return;
             }
 
-            // 26.05
+
             // Fixes the WPF bug where existing text in DataGridTextColumns is overwritten by any user input before the TextBox in DataGridCell enters edit mode and is initialized
             // and allows to use paste operation.
             bool isSpaceOrPaste = e.Key == Key.Space || (e.Key == Key.V && Keyboard.Modifiers.HasFlag(ModifierKeys.Control));
@@ -583,7 +615,6 @@ namespace SmartSchedule
             var grid = sender as DataGrid;
             if (grid == null) return;
 
-            // 26.05
             // Fixes the WPF bug where existing text in DataGridTextColumns is overwritten by any user input before the TextBox in DataGridCell enters edit mode and is initialized. 
             // The first part of "if" condition prevents crashes during paste operation. 
             if (!string.IsNullOrEmpty(e.Text) && !char.IsControl(e.Text, 0) && grid.CurrentColumn is DataGridTextColumn && Keyboard.FocusedElement is not TextBox)

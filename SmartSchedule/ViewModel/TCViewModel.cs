@@ -94,10 +94,8 @@ namespace SmartSchedule.ViewModel
         }
 
 
-
         private void DeleteRow(DGModel item)
         {
-
             MessageBoxResult deleteConfirmation = MessageBox.Show("Do you want to delete this task?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
             if (deleteConfirmation == MessageBoxResult.Yes)
@@ -106,7 +104,6 @@ namespace SmartSchedule.ViewModel
             }
 
         }
-
 
 
         public event PropertyChangedEventHandler? PropertyChanged;

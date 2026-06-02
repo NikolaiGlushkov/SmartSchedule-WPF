@@ -161,7 +161,6 @@
 
                         
                         
-                        
                         <DataGrid.Columns>
                             <DataGridTextColumn Binding="{Binding CreationDate, StringFormat={}{0:d}}" IsReadOnly="True" Header="Created" Width="100" />
 
@@ -330,7 +329,7 @@
                             <DataGridCheckBoxColumn Binding="{Binding IsDone, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" CanUserSort="True" IsReadOnly="False" Header="Done" Width="50">
                                 <DataGridCheckBoxColumn.ElementStyle>
                                     <Style TargetType="CheckBox">
-                                        <EventSetter Event="Click" Handler="CheckBox_Click"/>
+                                        <EventSetter Event="Click" Handler="IsDoneCheckBox_Click"/>
                                         <Setter Property="HorizontalAlignment" Value="Center"/>
                                     </Style>
                                 </DataGridCheckBoxColumn.ElementStyle>
