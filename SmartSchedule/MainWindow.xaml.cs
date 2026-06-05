@@ -25,6 +25,7 @@ namespace SmartSchedule
     /// </summary>
 
     // 1.1: create MainViewModel for tab collection for clear MVVM architecture.
+    // 1.1: optimize auto-save logic
     public partial class MainWindow : Window
     {
 
@@ -72,6 +73,7 @@ namespace SmartSchedule
             {
                 MessageBox.Show(ex.Message);
                 Close();
+                return;
             }
 
             if (TCDataList.Count == 0)
@@ -289,16 +291,7 @@ namespace SmartSchedule
         {
             var dataGrid = sender as DataGrid;
             dataGrid?.Items.Refresh();
-
-            try
-            {
-                _fileIOService.SaveData(TCDataList);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                Close();
-            }
+            // find a way to save the progress after this action
         }
 
         private void IsDoneCheckBox_Click(object sender, RoutedEventArgs e)
@@ -315,6 +308,7 @@ namespace SmartSchedule
             }
         }
 
+        // get rid of the repeating code from the IsDoneCheckBox_Click event (move repeating logic to a separate method)
         private void DataGrid_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             // This condition "if" allows access to the newline in textcolumns with "Shift + Enter".
@@ -324,8 +318,6 @@ namespace SmartSchedule
             var grid = sender as DataGrid;
             if (grid == null) return;
 
-
-            // get rid of the repeating code from the IsDoneCheckBox_Click event (move repeating logic to a separate method)
             // allow to use "spacebar" for checkmark in checkboxcolumn "Done" to trigger the Confirmation Window 
             if (e.Key == Key.Space && grid.CurrentColumn.Header?.ToString() == "Done")
             {
