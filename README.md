@@ -41,9 +41,26 @@ As a former psychologist, I designed this app using behavioral principles:
 
 ##  Tech Stack
 * **Programming Language:** C# 13
-* **Platform:** .NET 9
+* **Platform:** .NET 9 / .NET Framework 4.8
 * **Framework**: WPF
 * **Architecture**: MVVM
 * **Validation**: `INotifyDataErrorInfo`
 * **User Interface**: XAML (ControlTemplates, MultiDataTriggers, Storyboards), Dynamic `TabControl` with nested `DataGrid` views
 * **Data Persistence:** JSON integration with `INotifyPropertyChanged` and `NotifyOnSourceUpdated`
+
+<br>
+
+##  Installation
+
+**The application has been optimized for Windows by porting the codebase to .NET Framework 4.8.** 
+
+* **System Requirements** : Windows 10 / 11
+* **Runs instantly from a single ultra-lightweight 300 KB EXE file.**
+* **JSON database is saved locally in AppData\Roaming**
+
+### 3 simple steps to run the app
+
+1. Navigate to the **Releases** section on the top-right side of this page.
+2. Download the latest `SmartSchedule.exe` file. 
+3. Move it to any folder and double-click to launch!
+
