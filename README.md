@@ -24,7 +24,7 @@ As a former psychologist, I designed this app using behavioral principles:
 * **Custom Masked DatePicker**: The date format and mask dynamically adapt to the user's region (for example `DD.MM.YYYY` for Russia or `MM/DD/YYYY` for the US).
 * **Advanced Validation**: Real-time error tracking with custom animated popups.
 * **Easy Sorting**: Organize your tasks by date, priority, or status with one click.
-* **Data Protection**: JSON-based logic for automatic saving and loading that prevents any data loss, even after a power outage.
+* **Data Protection**: JSON-based logic for automatic saving and loading that prevents any data loss, even after a power outage a special backup system will recover all your data automatically.
 
 <br>
 
@@ -36,6 +36,14 @@ As a former psychologist, I designed this app using behavioral principles:
 * `Double-Click` on a tab header — Rename the tab.
 * `Enter` (while renaming) — Save the new tab name.
 * `Escape` or `Ctrl + Z` (while renaming) — Cancel renaming and keep the previous name.
+
+### Task Grid
+* **Navigation**: Full support for both mouse and keyboard.
+* `IsDone` Checkbox — Completes the task and opens the delete confirmation box. You can leave the task in Task Grid, if you want and the task will be highlighted in green. 
+* `IsImportant` Checkbox — Highlights high-priority tasks in red.
+* `Shift + Enter` — Creates a new line in Text and Expenses cells.
+* `Enter` — Saves cell changes directly to the JSON file.
+
 
 <br>
 
